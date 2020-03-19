@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>layuiAdmin</title>
+    <link rel="stylesheet" href="../css/layui.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<!--<form class="layui-form">-->
+<!--    <label>城市</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--        <select name="city">-->
+<!--            <option value=""></option>-->
+<!--            <option value="0">北京</option>-->
+<!--            <option value="1">上海</option>-->
+<!--            <option value="2">广州</option>-->
+<!--            <option value="3">深圳</option>-->
+<!--            <option value="4">杭州</option>-->
+<!--        </select>-->
+<!--    </div>-->
+<!--    <div class="layui-input-inline">-->
+<!--        <button class="layui-btn layui-btn-sm" lay-submit lay-filter="formSearch">搜索</button>-->
+<!--    </div>-->
+<!--</form>-->
+<table id="demo" lay-filter="test"></table>
+</body>
+</html>
+<!--顶部操作栏-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+    </div>
+</script>
+<!--每条数据的操作栏-->
+<script type="text/html" id="barDemo">
+    <!--    <a class="layui-btn layui-btn-xs" onclick="uploadPhoto()">选择图片</a>-->
+    <!--    <input type="file" id="photoFile" style="display: none;" onchange="upload()">-->
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.auth > 2){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+    {{#  } }}
+</script>
+<script type="text/html" id="editDialog">
+    <form class="layui-form" action="" style="padding: 20px;" lay-filter="editDialogForm" enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="pname" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">原价</label>
+            <div class="layui-input-inline">
+                <input step="0.01" type="number" id="market_price" placeholder="请输入原价" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">现价</label>
+            <div class="layui-input-inline">
+                <input type="number" step="0.01" id="shop_price" placeholder="请输入现价" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">商品介绍</label>
+            <div class="layui-input-block">
+                <textarea id="pdesc" placeholder="请填写商品介绍" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否热门商品</label>
+            <div class="layui-input-inline">
+                <input type="radio" id="ishot" name="is_hot" value="1" title="是">
+                <input type="radio" id="nothot" name="is_hot" value="0" title="否" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择商品类别</label>
+            <div class="layui-input-inline">
+                <select id="csid">
+                    <option value="1">女装男装</option>
+                    <option value="2">鞋靴箱包</option>
+                    <option value="3">运动户外</option>
+                    <option value="4">珠宝配饰</option>
+                    <option value="5">手机数码</option>
+                    <option value="6">家电办公</option>
+                    <option value="7">护肤彩妆</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择图片</label>
+            <div class="layui-input-inline">
+                <input type="file" step="0.01" id="image" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </form>
+</script>
+<script src="../js/jquery.min.js"></script>
+<script src="../layui/layui.all.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/check.js"></script>
+<script>
+    layuiModules = ['table', 'layer', 'form'];
+
+    function mounted() {
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , toolbar: '#toolbarDemo'
+            // , height: 550
+            , defaultToolbar: []
+            // , url: 'tableDemo.json' //数据接口,
+            , url: "http://59.110.125.40:8080/getproductbypage"
+            , page: true //开启分页
+            , parseData: function (res) {
+                return {
+                    "code": res.state, //解析接口状态
+                    "msg": res.errmsg, //解析提示文本
+                    "count": res.errcode, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
+            , request: {
+                page: "1",
+                limit: "100"
+            }
+            , cols: [[ //表头
+                {checkbox: true, LAY_CHECKED: false}
+                , {field: 'pid', title: '商品编号', width: 120, sort: true}
+                , {field: 'pname', title: '商品名称', width: 120}
+                // ,{field: 'image', title: 'avatar', templet: '#img'}
+                , {
+                    field: 'image',
+                    title: '商品图片',
+                    width: 100,
+                    templet: '<div><img src="{{ d.image }}" style="width:30px; height:30px;"></div>'
+                }
+                , {field: 'market_price', title: '原价', width: 80, sort: true}
+                , {field: 'shop_price', title: '现价', width: 80, sort: true}
+                , {field: 'pdesc', title: '商品介绍', width: 177}
+                , {field: 'is_hot', title: '是否热门', width: 100, sort: false}
+                , {field: 'csid', title: '商品类别', width: 100, sort: false}
+                , {fixed: 'right', width: 200, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+            ]]
+        });
+        //监听事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 1,
+                        title: '添加',
+                        area: ['50%', '70%'],
+                        content: $('#editDialog').html(), //这里content是一个普通的String
+                        btn: ['确定', '取消'],
+                        success: function (index, layero) {
+                            form.render();
+                        },
+                        yes: function (index, layero) {
+                            var pname = $("#pname").val();
+                            var market_price = $("#market_price").val();
+                            var shop_price = $("#shop_price").val();
+                            var pdesc = $("#pdesc").val();
+                            var is_hot = $('input[name="is_hot"]:checked').val();
+                            var csid = $("#csid").val();
+                            var fm = new FormData();
+                            fm.append("pname", pname);
+                            fm.append("m_price", market_price);
+                            fm.append("s_price", shop_price);
+                            fm.append("pdesc", pdesc);
+                            fm.append("is_hot", is_hot);
+                            fm.append("csid", csid);
+                            $.ajax({
+                                url: "http://59.110.125.40:8080/addproduct",
+                                type: "post",
+                                data: fm,
+                                contentType: false,
+                                processData: false,
+                                success: function (d) {
+                                    var file = $("#image")[0].files[0];
+                                    var formData = new FormData();
+                                    formData.append("pid",d);
+                                    formData.append('file', file);
+                                    $.ajax({
+                                        url: "http://103.40.20.150/chuli.php",
+                                        // url: "http://47.93.52.76/chuli.php",
+                                        data: formData,
+                                        type: "post",
+                                        async: false, //这是重要的一步，防止重复提交的
+                                        cache: false,  //设置为false，上传文件不需要缓存。
+                                        contentType: false,//设置为false,因为是构造的FormData对象,所以这里设置为false。
+                                        processData: false,//设置为false,因为data值是FormData对象，不需要对数据做处理。
+                                        success:function () {
+                                            layer.msg("修改成功");
+                                            layer.close(index);
+                                        }
+                                    })
+                                }
+
+                            })
+                        },
+                        btn2: function (index, layero) {
+                            // return false //开启该代码可禁止点击该按钮关闭
+                            layer.msg("已取消添加");
+                        }
+                    });
+                    break;
+                case 'delete':
+                    layer.confirm('真的删除选中行么', function (index) {
+                        if (checkStatus.data.length <= 0)
+                            layer.msg("没有选中行");
+                        else {
+                            var temp = new Array();
+                            var d = checkStatus.data;
+                            var l = d.length;
+                            for (var i = 0; i < l; i++) {
+                                temp.push(d[i].pid);
+                            }
+                            $.ajax({
+                                url: "http://59.110.125.40:8080/delproductbypids",
+                                traditional: true,
+                                data: {
+                                    pids: temp
+                                },
+                                type: "post",
+                                success: function (data) {
+                                    if (data == "success") {
+                                        layer.msg("删除成功");
+                                        window.location.reload();
+                                    } else if (data == "fail")
+                                        layer.msg("删除失败");
+
+                                },
+                                error: function () {
+                                    layer.msg("系统错误");
+                                }
+                            })
+                            //向服务端发送删除指令
+                            layer.close(index);
+                        }
+                    });
+                    break;
+            }
+        });
+
+        //监听工具条
+        table.on('tool(test)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'detail') { //查看
+                //do somehing
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    console.log(obj);
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    $.ajax({
+                        url: "http://59.110.125.40:8080/delproductbypid",
+                        data: {
+                            pid: obj.data.pid
+                        },
+                        type: "post",
+                        success: function (data) {
+                            if (data == "success") {
+                                layer.msg("删除成功");
+                                // window.location.reload();
+                            } else if (data == "fail")
+                                layer.msg("删除失败");
+
+                        },
+                        error: function () {
+                            layer.msg("系统错误");
+                        }
+                    })
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') { //编辑
+                //do something
+                layer.open({
+                    type: 1,
+                    title: '编辑',
+                    area: ['50%', '70%'],
+                    content: $('#editDialog').html(), //这里content是一个普通的String
+                    btn: ['确定', '取消'],
+                    success: function (index, layero) {
+                        form.render();
+                        form.val("editDialogForm", data);
+                        $("#pname").val(data.pname);
+                        $("#market_price").val(data.market_price);
+                        $("#shop_price").val(data.shop_price);
+                        $("#pdesc").val(data.pdesc);
+                        if (data.is_hot == "是") $("#ishot").attr("checked", "checked");
+                        else $("#nothot").attr("checked", "checked");
+                        var temp = new Array('女装男装', '鞋靴箱包', '运动户外', '珠宝配饰', '手机数码', '家电办公', '护肤彩妆');
+                        for (var i = 0, l = temp.length; i < l; i++) {
+                            if (temp[i] == data.csid) {
+                                $("#csid").val(i + 1);
+                            }
+                        }
+                    },
+                    yes: function (index, layero) {
+                        var pname = $("#pname").val();
+                        var market_price = $("#market_price").val();
+                        var shop_price = $("#shop_price").val();
+                        var pdesc = $("#pdesc").val();
+                        var is_hot = $('input[name="is_hot"]:checked').val();
+                        var csid = $("#csid").val();
+                        var fm = new FormData();
+                        fm.append("pname", pname);
+                        fm.append("m_price", market_price);
+                        fm.append("s_price", shop_price);
+                        fm.append("pdesc", pdesc);
+                        fm.append("is_hot", is_hot);
+                        fm.append("csid", csid);
+                        fm.append("pid", data.pid);
+                        $.ajax({
+                            url: "http://59.110.125.40:8080/updateproduct",
+                            type: "post",
+                            data: fm,
+                            contentType: false,
+                            processData: false,
+                            success: function () {
+                                var file = $("#image")[0].files[0];
+                                var formData = new FormData();
+                                formData.append('file', file);
+                                formData.append("pid",data.pid);
+                                $.ajax({
+                                    url: "http://103.40.20.150/chuli.php",
+                                    // url: "http://47.93.52.76/chuli.php",
+                                    data: formData,
+                                    type: "post",
+                                    async: false, //这是重要的一步，防止重复提交的
+                                    cache: false,  //设置为false，上传文件不需要缓存。
+                                    contentType: false,//设置为false,因为是构造的FormData对象,所以这里设置为false。
+                                    processData: false,//设置为false,因为data值是FormData对象，不需要对数据做处理。
+                                    success:function () {
+                                        layer.msg("修改成功");
+                                        layer.close(index);
+                                    }
+                                })
+                            }
+
+                        })
+                    },
+                    btn2: function (index, layero) {
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    , title: 'xxx'
+                });
+            }
+        });
+
+    }
+
+    function checknull() {
+        for (var i = 0, l = arguments.length; i < l; i++) {
+            if (arguments[i] == null || arguments[i] == "" || arguments == "undefiend") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+</script>

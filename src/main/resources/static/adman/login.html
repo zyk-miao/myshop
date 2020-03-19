@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="../css/layui.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        html,body{
+            height: 100%;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url("../adminimg/login_bg.png");
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<div class="login-div">
+    <h1>登录</h1>
+    <form id="login-form" action="#">
+        <div class="login-form-item">
+            <input id="username" placeholder="用户名">
+        </div>
+        <div class="login-form-item">
+            <input id="password" type="password" placeholder="密码">
+        </div>
+        <button class="btn-login" type="submit">登录</button>
+    </form>
+</div>
+</body>
+</html>
+<script src="../js/jquery.min.js"></script>
+<script src="../layui/layui.all.js"></script>
+<script src="../js/common.js"></script>
+<script>
+
+    layuiModules=['layer','form'];
+
+    function mounted(){
+        $('#login-form').submit(function () {
+            var name=$("#username").val();
+            var passwd=$("#password").val();
+            //document.cookie="zyk=;expires=Sun, 31 Dec 2017 12:00:00 UTC;";
+            //console.log(document.cookie);
+            $.ajax({
+                url:"http://59.110.125.40:8080/admincheck",
+                type:"post",
+                data:{
+                    adminname:name,
+                    adminpassword:passwd
+                },success:function (d) {
+                    if (d)   {
+                        document.cookie="login_name="+name;
+                        document.cookie="login_password="+passwd;
+                        location.href="index.html";
+                    }
+                    else{
+                        alert("密码错误");
+                        return false;
+                    }
+                }
+            })
+
+        })
+    }
+
+</script>

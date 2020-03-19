@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0043)http://localhost:8080/mango/cart/list.jhtml -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>购物车</title>
+
+<link href="./css/common.css" rel="stylesheet" type="text/css">
+<link href="./css/cart.css" rel="stylesheet" type="text/css">
+<script type="application/javascript" src="js/jquery-3.3.1.js"></script>
+	<script type="application/javascript">
+		window.onload=function () {
+
+			$(".classfication").click(function () {
+				window.localStorage.setItem("csid",this.id);
+				window.location.href="classification.htm";
+			});
+			$("#submitorder").click(function () {
+				// var cookie = document.cookie;
+				// var ca = cookie.split(';');
+				// for (var i = 0; i < ca.length; i++) {
+				// 	var temp = ca[i].split('=');
+				// 	if (temp[0] === "username" && temp[1] != null) {
+				// 		//document.getElementById("logina").innerHTML = temp[1];
+				// 	}
+				// 	else{
+				// 		alert("请先登录");
+				// 		window.location.href="login.htm";}
+				// }
+				// window.location.href="";
+			});
+			showcort();
+			$("#clear").click(function () {
+				var tbody=document.getElementById("shopcortbody");
+				var tr=tbody.children;
+				for (var i = 0; i <tr.length ; i++) {
+					if (i==0) continue;
+						tbody.removeChild(tr[i]);i--;
+				 }
+				for (var i=0;i<localStorage.length;i++)
+					if (localStorage.key(i).search(/pid\d+/)!=-1){
+						localStorage.removeItem(localStorage.key(i));
+						i--;
+					}
+				document.getElementById("effectivePoint").innerHTML=0;
+				document.getElementById("effectivePrice").innerHTML=0+"￥";
+       
+		});}
+function showcort() {
+			var temp=new Array();
+           for (var i=0;i<localStorage.length;i++){
+           	var key=localStorage.key(i);
+           //	console.log(key+"="+localStorage.getItem(key));
+          if (key.search(/pid\d+/)!=-1){
+          	temp.push(key);
+		  }
+		   }
+            $.ajax({
+				url:"http://59.110.125.40:8080/getproductbypids",
+				traditional:true,
+				data:{
+					pids:temp
+				},
+				type:"post",
+				success:function (data) {
+					//document.getElementById("shopcortbody").appendChild(createorder(data));
+					if (data==null) return;
+					var t=createorder(data);
+					for (var i = 0; i <data.length ; i++) {
+						document.getElementById("shopcortbody").appendChild(t[i]);
+					}
+					var tprice=document.getElementsByClassName("tprice");
+					var total=0;
+					for (var i = 0; i <tprice.length ; i++) {
+                       	total+=parseInt(tprice[i].firstChild.innerHTML);
+					}
+					document.getElementById("effectivePoint").innerHTML=total*10;
+					document.getElementById("effectivePrice").innerHTML=total+"￥";
+					delone();
+				}
+			})
+}
+function createorder(data) {
+	var trt=new Array();
+	for (var i = 0; i <data.length ; i++) {
+		var tr=document.createElement("tr");
+var td=document.createElement("td");
+td.width=60;
+var img=document.createElement("img");
+img.src=data[i].image;
+td.appendChild(img);
+		var td5=document.createElement("td");
+		var a1=document.createElement("a");
+		a1.target="_blank";
+		a1.innerHTML=data[i].pname;
+		td5.appendChild(a1);
+var td1=document.createElement("td");
+td1.innerHTML=data[i].shop_price;
+var td2=document.createElement("td");
+td2.className="quantity";
+td2.width=60;
+td2.innerHTML=localStorage.getItem("pid"+data[i].pid);
+var td3=document.createElement("td");
+td3.width=140;
+var span=document.createElement("span");
+span.className="subtotal";
+span.innerHTML=data[i].shop_price*localStorage.getItem("pid"+data[i].pid);
+td3.appendChild(span);
+var td4=document.createElement("td");
+var a=document.createElement("a");
+a.className="delete";
+a.innerHTML="删除";
+a.id = data[i].pid;
+td4.appendChild(a);
+td3.className="tprice";
+		tr.appendChild(td);tr.appendChild(td5);
+		tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);tr.appendChild(td4);
+		trt[i]=tr;
+	}
+
+	return trt;
+}
+function delone() {
+	$(".delete").click(function () {
+		localStorage.removeItem("pid"+this.id);
+		var a=this;
+		var tr=a.parentNode.parentNode;
+		var trchildred=tr.children;
+		var tbody=document.getElementById("shopcortbody");
+		tbody.removeChild(tr);
+		var t=parseInt(trchildred[4].firstElementChild.innerHTML);
+		document.getElementById("effectivePoint").innerHTML=(parseInt(document.getElementById("effectivePoint").innerHTML)-t*10)+"";
+		document.getElementById("effectivePrice").innerHTML=(parseInt(document.getElementById("effectivePrice").innerHTML)-t)+"￥";
+	});
+}
+	</script>
+
+</head>
+<body>
+<div class="container header">
+	<div class="span5">
+		<div class="logo">
+			<a href="index.htm">
+				<img src="./image/r___________renleipic_01/logo.png" />
+			</a>
+		</div>
+	</div>
+	<div class="span9">
+<div class="headerAd">
+					<img src="./image/header.jpg" width="320" height="50" alt="正品保障" title="正品保障">
+</div>	</div>
+	<div class="span10 last">
+		<div class="topNav clearfix">
+			<ul>
+				<li id="headerLogin" class="headerLogin" style="display: list-item;">
+					<a href="./login.htm">登录</a>|
+				</li>
+				<li id="headerRegister" class="headerRegister" style="display: list-item;">
+					<a href="./register.htm">注册</a>|
+				</li>
+				<li id="headerUsername" class="headerUsername"></li>
+				<li id="headerLogout" class="headerLogout">
+					<a href="./index.htm">[退出]</a>|
+				</li>
+						<li>
+							<a >会员中心</a>
+							|
+						</li>
+						<li>
+							<a>购物指南</a>
+							|
+						</li>
+						<li>
+							<a>关于我们</a>
+							
+						</li>
+			</ul>
+		</div>
+		<div class="cart">
+			<a href="./shopcart.htm">购物车</a>
+		</div>
+			<div class="phone">
+				客服热线:
+				<strong>96008/53277764</strong>
+			</div>
+	</div>
+	<div class="span24">
+	<ul class="mainNav">
+		<li>
+			<a href="./index.htm">首页</a>
+			|
+		</li>
+		<li>
+			<a href="#" id="1" class="classfication">女装男装</a>
+			|
+		</li>
+		<li>
+			<a href="#" id="2" class="classfication">鞋靴箱包</a>
+			|
+		</li>
+		<li>
+			<a href="#" id="3" class="classfication">运动户外</a>
+			|
+		</li>
+		<li>
+
+			<a href="#" id="4" class="classfication">珠宝配饰</a>
+			|
+		</li>
+		<li>
+			<a href="#" id="5" class="classfication">手机数码</a>
+			|
+		</li>
+		<li>
+			<a href="#" id="6" class="classfication">家电办公</a>
+			|
+		</li>
+		<li>
+			<a href="#" id="7" class="classfication">护肤彩妆</a>
+			|
+		</li>
+					
+		</ul>
+	</div>
+	
+</div>	<div class="container cart">
+		<div class="span24">
+			<div class="step step1">
+				
+			</div>
+				<table>
+					<tbody id="shopcortbody"><tr>
+						<th>图片</th>
+						<th>商品</th>
+						<th>价格</th>
+						<th>数量</th>
+						<th>小计</th>
+						<th>操作</th>
+					</tr>
+				</tbody></table>
+				<dl id="giftItems" class="hidden" style="display: none;">
+				</dl>
+				<div class="total">
+					<em id="promotion"></em>
+							<em>
+								登录后确认是否享有优惠
+							</em>
+					赠送积分: <em id="effectivePoint">596</em>
+					商品金额: <strong id="effectivePrice">￥596.00元</strong>
+				</div>
+				<div class="bottom">
+					<a href="javascript:;" id="clear" class="clear">清空购物车</a>
+				</div>
+<!--			<p >-->
+<!--				收货地址：<input name="order.user.addr" type="text" value="" style="width:350px" />-->
+<!--				<br />-->
+<!--				收货人&nbsp;&nbsp;&nbsp;：<input name="order.user.username" type="text" value="" style="width:150px" />-->
+<!--				<br />-->
+<!--				联系方式：<input name="order.user.phone" type="text"value="" style="width:150px" />-->
+
+<!--			</p>-->
+			<a href="#" id="submitorder" style="float: right"  class="submit">提交订单</a>
+		</div>
+	</div>
+<div class="container footer">
+	<div class="span24">
+		<div class="footerAd">
+					<img src="./image/footer.jpg" width="950" height="52" alt="我们的优势" title="我们的优势">
+</div>	</div>
+	<div class="span24">
+		<ul class="bottomNav">
+				<li>
+						<a >关于我们</a>
+						|
+					</li>
+					<li>
+						<a>联系我们</a>
+						|
+					</li>
+					<li>
+						<a>招贤纳士</a>
+						|
+					</li>
+					<li>
+						<a>法律声明</a>
+						|
+					</li>
+					<li>
+						<a>友情链接</a>
+						|
+					</li>
+					<li>
+						<a target="_blank">支付方式</a>
+						|
+					</li>
+					<li>
+						<a  target="_blank">配送方式</a>
+						|
+					</li>
+					<li>
+						<a>服务声明</a>
+						|
+					</li>
+					<li>
+						<a>广告声明</a>
+						
+					</li>
+		</ul>
+	</div>
+	<div class="span24">
+		<div class="copyright">Copyright © 2005-2015 网上商城 版权所有</div>
+	</div>
+</div>
+</body></html>

@@ -1,0 +1,45 @@
+Manifest-Version: 1.0
+Main-Class: com.zyk.demo.DemoApplication
+Class-Path: spring-context-5.2.2.RELEASE.jar mybatis-3.5.2.jar slf4j-api
+ -1.7.29.jar log4j-api-2.12.1.jar objenesis-2.6.jar jakarta.validation-a
+ pi-2.0.1.jar jsqlparser-1.0.jar junit-vintage-engine-5.5.2.jar jakarta.
+ activation-1.2.1.jar spring-boot-starter-jdbc-2.2.2.RELEASE.jar spring-
+ expression-5.2.2.RELEASE.jar spring-boot-starter-web-2.2.2.RELEASE.jar 
+ jsonassert-1.5.0.jar spring-boot-starter-logging-2.2.2.RELEASE.jar Hika
+ riCP-3.4.1.jar spring-core-5.2.2.RELEASE.jar junit-jupiter-engine-5.5.2
+ .jar spring-boot-2.2.2.RELEASE.jar spring-boot-devtools-2.2.2.RELEASE.j
+ ar mail.jar spring-boot-test-2.2.2.RELEASE.jar thymeleaf-3.0.11.RELEASE
+ .jar spring-boot-starter-thymeleaf-2.2.2.RELEASE.jar tomcat-embed-core-
+ 9.0.29.jar jackson-datatype-jsr310-2.10.1.jar jackson-databind-2.10.1.j
+ ar spring-boot-starter-test-2.2.2.RELEASE.jar junit-jupiter-api-5.5.2.j
+ ar jackson-datatype-jdk8-2.10.1.jar spring-jdbc-5.2.2.RELEASE.jar jakar
+ ta.annotation-api-1.3.5.jar jackson-module-parameter-names-2.10.1.jar a
+ piguardian-api-1.1.0.jar pagehelper-5.1.2.jar jackson-annotations-2.10.
+ 1.jar junit-platform-commons-1.5.2.jar spring-webmvc-5.2.2.RELEASE.jar 
+ snakeyaml-1.25.jar jakarta.mail-1.6.4.jar json-path-2.4.0.jar spring-jc
+ l-5.2.2.RELEASE.jar junit-jupiter-params-5.5.2.jar thymeleaf-extras-jav
+ a8time-3.0.4.RELEASE.jar junit-platform-engine-1.5.2.jar mysql-connecto
+ r-java-8.0.18.jar jackson-core-2.10.1.jar byte-buddy-1.10.4.jar accesso
+ rs-smart-1.2.jar xmlunit-core-2.6.3.jar pagehelper-5.1.2.jar spring-con
+ text-support-4.3.13.RELEASE.jar unbescape-1.1.6.RELEASE.jar assertj-cor
+ e-3.13.2.jar hibernate-validator-6.0.18.Final.jar spring-boot-test-auto
+ configure-2.2.2.RELEASE.jar logback-core-1.2.3.jar mybatis-spring-2.0.2
+ .jar spring-boot-starter-validation-2.2.2.RELEASE.jar spring-boot-start
+ er-2.2.2.RELEASE.jar jaxb-api-2.3.1.jar logback-classic-1.2.3.jar sprin
+ g-boot-starter-mail-2.2.2.RELEASE.jar spring-web-5.2.2.RELEASE.jar andr
+ oid-json-0.0.20131108.vaadin1.jar spring-aop-5.2.2.RELEASE.jar spring-b
+ oot-starter-tomcat-2.2.2.RELEASE.jar thymeleaf-spring5-3.0.11.RELEASE.j
+ ar jakarta.activation-api-1.2.1.jar spring-tx-5.2.2.RELEASE.jar pagehel
+ per-spring-boot-autoconfigure-1.2.3.jar junit-4.12.jar pagehelper-sprin
+ g-boot-starter-1.2.3.jar asm-5.0.4.jar lombok-1.18.10.jar spring-beans-
+ 5.2.2.RELEASE.jar commons-io-2.4.jar mybatis-spring-boot-autoconfigure-
+ 2.1.0.jar mockito-core-3.1.0.jar mybatis-spring-boot-starter-2.1.0.jar 
+ tomcat-embed-el-9.0.29.jar spring-boot-starter-json-2.2.2.RELEASE.jar b
+ yte-buddy-agent-1.10.4.jar jboss-logging-3.4.1.Final.jar spring-test-5.
+ 2.2.RELEASE.jar javax.activation-api-1.2.0.jar junit-jupiter-5.5.2.jar 
+ spring-boot-autoconfigure-2.2.2.RELEASE.jar classmate-1.5.1.jar hamcres
+ t-core-2.1.jar jul-to-slf4j-1.7.29.jar mockito-junit-jupiter-3.1.0.jar 
+ opentest4j-1.2.0.jar tomcat-embed-websocket-9.0.29.jar json-smart-2.3.j
+ ar attoparser-2.0.5.RELEASE.jar jakarta.xml.bind-api-2.3.2.jar log4j-to
+ -slf4j-2.12.1.jar hamcrest-2.1.jar
+

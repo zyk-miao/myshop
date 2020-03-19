@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0048)http://localhost:8080/mango/product/list/1.jhtml -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>网上商城</title>
+<link href="./css/common.css" rel="stylesheet" type="text/css"/>
+<link href="./css/product.css" rel="stylesheet" type="text/css"/>
+<script type="application/javascript" src="js/jquery-3.3.1.js"></script>
+<script type="application/javascript">
+	window.onload=function () {
+		var cookie = document.cookie;
+		var ca = cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+
+			var temp = ca[i].split('=');
+			if (temp[0] === "username" && temp[1] != null) {
+
+				document.getElementById("logina").innerHTML = temp[1];
+			}
+		}
+		$.ajax({
+			url:"http://59.110.125.40:8080/getproductbycsid",
+			data:{
+				csid:window.localStorage.getItem("csid")
+			},
+			type:"post",
+			success:function (d) {
+				createEs(d);
+			}
+		});
+
+ $(".classfication").click(function () {
+      $.ajax({
+		  url:"http://59.110.125.40:8080/getproductbycsid",
+		  data:{
+		  	csid:this.id
+		  },
+		  type:"post",
+		  success:function (d) {
+          createEs(d);
+		  }
+	  })
+ });
+	}
+	function createEs(d) {
+		var ul = document.getElementById("result").firstElementChild;
+		ul.innerHTML = '';
+		for (var i = 0; i < d.length; i++) {
+			var li = document.createElement("li");
+			li.style.height="250px";
+			ul.appendChild(li);
+			var a = document.createElement("a");
+			li.appendChild(a);
+			var img = document.createElement("img");
+			img.src = d[i].image;
+			img.width = "150";
+			img.height = "150";
+			img.style.display = "inline-block";
+			img.setAttribute("id", d[i].pid);
+			img.className = "products";
+			var span1 = document.createElement("span");
+			span1.style.color = 'color:green';
+			span1.innerHTML = d[i].pname;
+			var span2 = document.createElement("span");
+			span2.className = 'price';
+			span2.innerHTML = '商城价： ￥' + d[i].shop_price + '/份';
+			a.append(img);
+			a.append(span1);
+			a.append(span2);
+		}
+		$(".products").click(function () {
+			window.localStorage.setItem("pid", this.id);
+			window.location.href = "fen.htm";
+		});
+	}
+</script>
+</head>
+<body>
+<div class="container header">
+	<div class="span5">
+		<div class="logo">
+			<a href="index.htm">
+				<img src="./image/r___________renleipic_01/logo.png" />
+			</a>
+		</div>
+	</div>
+	<div class="span9">
+<div class="headerAd">
+					<img src="./image/header.jpg" width="320" height="50" alt="正品保障" title="正品保障">
+</div>	</div>
+	<div class="span10 last">
+		<div class="topNav clearfix">
+			<ul>
+				<li id="headerLogin" class="headerLogin" style="display: list-item;">
+					<a id="logina" href="./login.htm">登录</a>|
+				</li>
+				<li id="headerRegister" class="headerRegister" style="display: list-item;">
+					<a href="./register.htm">注册</a>|
+				</li>
+				<li id="headerUsername" class="headerUsername"></li>
+				<li id="headerLogout" class="headerLogout">
+					<a href="./index.htm">[退出]</a>|
+				</li>
+						<li>
+							<a >会员中心</a>
+							|
+						</li>
+						<li>
+							<a >购物指南</a>
+							|
+						</li>
+						<li>
+							<a >关于我们</a>
+							
+						</li>
+			</ul>
+		</div>
+		<div class="cart">
+			<a href="./shopcart.htm">购物车</a>
+		</div>
+			<div class="phone">
+				客服热线:
+				<strong>15726607618</strong>
+			</div>
+	</div>
+	<div class="span24">
+		<ul class="mainNav">
+			<li>
+				<a href="./index.htm">首页</a>
+				|
+			</li>
+			<li>
+				<a href="#" id="1" class="classfication">女装男装</a>
+				|
+			</li>
+			<li>
+				<a href="#" id="2" class="classfication">鞋靴箱包</a>
+				|
+			</li>
+			<li>
+				<a href="#" id="3" class="classfication">运动户外</a>
+				|
+			</li>
+			<li>
+
+				<a href="#" id="4" class="classfication">珠宝配饰</a>
+				|
+			</li>
+			<li>
+				<a href="#" id="5" class="classfication">手机数码</a>
+				|
+			</li>
+			<li>
+				<a href="#" id="6" class="classfication">家电办公</a>
+				|
+			</li>
+			<li>
+				<a href="#" id="7" class="classfication">护肤彩妆</a>
+				|
+			</li>
+
+
+		</ul>
+	</div>
+	
+</div>	
+<div class="container productList">
+		<div class="span6">
+			<div class="hotProductCategory">
+						<dl>
+							<dt>
+								<a href="./image/蔬菜 - Powered By Mango Team.htm">女装男装</a>
+							</dt>
+									<dd>
+										<a >潮流女装</a>
+									</dd>
+									<dd>
+										<a >初冬羽绒</a>
+									</dd>
+									<dd>
+										<a >毛呢大衣</a>
+									</dd>
+									<dd>
+										<a >温暖毛衣</a>
+									</dd>
+							<dd>
+								<a >精选男装</a>
+							</dd>
+							<dd>
+								<a >冬季外套</a>
+							</dd>
+							<dd>
+								<a >羽绒服</a>
+							</dd>
+						</dl>
+						<dl>
+							<dt>
+								<a>鞋靴箱包</a>
+							</dt>
+									<dd>
+										<a >女鞋</a>
+									</dd>
+									<dd>
+										<a >短靴</a>
+									</dd>
+							<dd>
+								<a >男鞋</a>
+							</dd>
+							<dd>
+								<a >女包</a>
+							</dd>
+							<dd>
+								<a >男包</a>
+							</dd>
+							<dd>
+								<a >服饰配件</a>
+							</dd>
+						</dl>
+						<dl>
+							<dt>
+								<a >运动户外</a>
+							</dt>
+									<dd>
+										<a >运动鞋</a>
+									</dd>
+									<dd>
+										<a >运动服</a>
+									</dd>
+									<dd>
+										<a >户外运动</a>
+									</dd>
+									<dd>
+										<a >健身装备</a>
+									</dd>
+									<dd>
+										<a >骑行装备</a>
+									</dd>
+									<dd>
+										<a >加工水产</a>
+									</dd>
+						</dl>
+						<dl>
+							<dt>
+								<a >珠宝配饰</a>
+							</dt>
+									<dd>
+										<a >珠宝首饰</a>
+									</dd>
+									<dd>
+										<a >时尚饰品</a>
+									</dd>
+									<dd>
+										<a >品质手表</a>
+									</dd>
+							<dd>
+								<a >眼镜配饰</a>
+							</dd>
+						</dl>
+						<dl>
+							<dt>
+								<a >手机数码</a>
+							</dt>
+									<dd>
+										<a >手机</a>
+									</dd>
+									<dd>
+										<a >平板</a>
+									</dd>
+									<dd>
+										<a >电脑</a>
+									</dd>
+							<dd>
+								<a >相机</a>
+							</dd>
+						</dl>
+						<dl>
+							<dt>
+								<a >家电办公</a>
+							</dt>
+									<dd>
+										<a >大家电</a>
+									</dd>
+									<dd>
+										<a >厨房电器</a>
+									</dd>
+									<dd>
+										<a >生活电器</a>
+									</dd>
+									<dd>
+										<a >个户电器</a>
+									</dd>
+									<dd>
+										<a >办公耗材</a>
+									</dd>
+						</dl>
+						<dl>
+							<dt>
+								<a >护肤彩妆</a>
+							</dt>
+							        <dd>
+										<a >美容护肤</a>
+									</dd>
+									<dd>
+										<a >强效保养</a>
+									</dd>
+									<dd>
+										<a >超值彩妆</a>
+									</dd>
+									<dd>
+										<a >换季保养</a>
+									</dd>
+						</dl>
+			</div>
+		</div>
+		<div class="span18 last">
+			
+			<form id="productForm" action="./image/蔬菜 - Powered By Mango Team.htm" method="get">
+				<input type="hidden" id="brandId" name="brandId" value="">
+				<input type="hidden" id="promotionId" name="promotionId" value="">
+				<input type="hidden" id="orderType" name="orderType" value="">
+				<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+				<input type="hidden" id="pageSize" name="pageSize" value="20">
+					
+				<div id="result" class="result table clearfix">
+						<ul>
+<!--						<li>-->
+<!--										<a >-->
+<!--											<img src="./image/4a51167a-89d5-4710-aca2-7c76edc355b8-thumbnail.jpg" width="170" height="170"  style="display: inline-block;">-->
+<!--											   -->
+<!--											<span style='color:green'>-->
+<!--											 大冬瓜-->
+<!--											</span>-->
+<!--											<span class="price">-->
+<!--												商城价： ￥4.78/份-->
+<!--											</span>-->
+<!--										</a>-->
+<!--									</li>-->
+
+						</ul>
+				</div>
+<!--	<div class="pagination">-->
+<!--			<span class="firstPage">&nbsp;</span>-->
+<!--			<span class="previousPage">&nbsp;</span>-->
+<!--				<span class="currentPage">1</span>-->
+<!--				<a href="javascript: $.pageSkip(2);">2</a>-->
+<!--			<a class="nextPage" href="javascript: $.pageSkip(2);">&nbsp;</a>-->
+<!--			-->
+<!--			<a class="lastPage" href="javascript: $.pageSkip(2);">&nbsp;</a>-->
+<!--	</div>-->
+			</form>
+		</div>
+	</div>
+<div class="container footer">
+	<div class="span24">
+		<div class="footerAd">
+					<img src="./image/footer.jpg" width="950" height="52" alt="我们的优势" title="我们的优势">
+</div>	</div>
+	<div class="span24">
+		<ul class="bottomNav">
+					<li>
+						<a >关于我们</a>
+						|
+					</li>
+					<li>
+						<a>联系我们</a>
+						|
+					</li>
+					<li>
+						<a >诚聘英才</a>
+						|
+					</li>
+					<li>
+						<a >法律声明</a>
+						|
+					</li>
+					<li>
+						<a>友情链接</a>
+						|
+					</li>
+					<li>
+						<a target="_blank">支付方式</a>
+						|
+					</li>
+					<li>
+						<a  target="_blank">配送方式</a>
+						|
+					</li>
+					<li>
+						<a >官网</a>
+						|
+					</li>
+					<li>
+						<a >论坛</a>
+						
+					</li>
+		</ul>
+	</div>
+	<div class="span24">
+		<div class="copyright">Copyright©2005-2015 网上商城 版权所有</div>
+	</div>
+</div>
+</body></html>
